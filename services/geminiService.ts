@@ -1,10 +1,15 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Lazy-init helper to prevent top-level crashes if process.env is not defined yet
+const getAI = () => {
+  const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : '';
+  return new GoogleGenAI({ apiKey: apiKey || '' });
+};
 
 export const validateWord = async (word: string, category: string, letter: string): Promise<{ isValid: boolean; reason?: string }> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Soru: "${word}" kelimesi "${category}" kategorisine uygun ve "${letter}" harfi ile başlayan geçerli bir Türkçe kelime midir?`,
@@ -24,13 +29,17 @@ export const validateWord = async (word: string, category: string, letter: strin
     return JSON.parse(response.text.trim());
   } catch (error) {
     console.error("Validation error:", error);
-    // Fallback logic if API fails
-    return { isValid: word.toUpperCase().startsWith(letter.toUpperCase()) && word.length > 2 };
+    // Fallback logic
+    return { 
+      isValid: word.toLowerCase().startsWith(letter.toLowerCase()) && word.length > 2,
+      reason: "Bağlantı hatası nedeniyle temel kontrol yapıldı."
+    };
   }
 };
 
 export const getBotResponse = async (category: string, letter: string, usedWords: string[]): Promise<string> => {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Bana "${category}" kategorisinde olan ve "${letter}" harfi ile başlayan, daha önce kullanılmamış bir Türkçe kelime söyle. Sadece kelimeyi döndür. Daha önce kullanılanlar: ${usedWords.join(", ")}`,
