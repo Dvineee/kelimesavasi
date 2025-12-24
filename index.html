@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Kelime Savaşı</title>
+    <title>Kelime Savaşı - Online</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,8 +52,8 @@
       }
       
       .gradient-mesh {
-        background: radial-gradient(circle at 0% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 40%),
-                    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+        background: radial-gradient(circle at 0% 0%, rgba(249, 115, 22, 0.1) 0%, transparent 40%),
+                    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
       }
 
       .btn-orange {
@@ -62,36 +62,35 @@
       }
       .btn-orange:active { transform: scale(0.95); }
 
-      .active-pulse {
-        position: relative;
-      }
-      .active-pulse::after {
-        content: '';
-        position: absolute;
-        width: 100%; height: 100%;
-        border-radius: inherit;
-        top: 0; left: 0;
-        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
-        animation: active-pulse 2s infinite;
-      }
       @keyframes active-pulse {
         0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
         100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
       }
+      .active-pulse {
+        animation: active-pulse 2s infinite;
+      }
+      
+      /* Mobile keyboard focus fix */
+      @media (max-width: 640px) {
+        input { font-size: 16px !important; }
+      }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "@google/genai": "https://esm.sh/@google/genai@1.34.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
-</head>
+  </head>
   <body class="gradient-mesh min-h-screen">
     <div id="root"></div>
+    <!-- index.tsx is imported automatically by the environment -->
   </body>
 </html>
